@@ -1,0 +1,130 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "python-oop-analyzer"
+dynamic = ["version"]
+description = "A static analysis tool for Python OOP best practices"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+authors = [
+    { name = "Agustin Dorda" },
+]
+keywords = [
+    "oop",
+    "static-analysis",
+    "code-quality",
+    "linter",
+    "python",
+    "best-practices",
+    "clean-code",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing",
+    "Typing :: Typed",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.4.0",
+    "mypy>=1.10.0",
+    "pre-commit>=3.7.0",
+    "build>=1.2.0",
+    "twine>=5.0.0",
+]
+
+[project.scripts]
+oop-analyzer = "oop_analyzer.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/angdmz/oop-analyzer"
+Documentation = "https://github.com/angdmz/oop-analyzer#readme"
+Repository = "https://github.com/angdmz/oop-analyzer.git"
+Issues = "https://github.com/angdmz/oop-analyzer/issues"
+Changelog = "https://github.com/angdmz/oop-analyzer/blob/main/CHANGELOG.md"
+
+[tool.hatch.version]
+path = "oop_analyzer/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["oop_analyzer"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # Pyflakes
+    "I",      # isort
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "UP",     # pyupgrade
+    "ARG",    # flake8-unused-arguments
+    "SIM",    # flake8-simplify
+]
+ignore = [
+    "E501",   # line too long (handled by formatter)
+    "B008",   # do not perform function calls in argument defaults
+    "SIM102", # nested if statements (sometimes clearer for AST traversal)
+    "SIM116", # use dict instead of if statements (examples show anti-patterns)
+    "ARG001", # unused function argument (examples have intentional unused args)
+    "ARG002", # unused method argument (examples have intentional unused args)
+    "E402",   # module level import not at top (examples show before/after patterns)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["oop_analyzer"]
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+strict_optional = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+[tool.coverage.run]
+source = ["oop_analyzer"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]
+
+[dependency-groups]
+dev = [
+    "build>=1.4.0",
+    "mypy>=1.19.1",
+    "twine>=6.2.0",
+]
